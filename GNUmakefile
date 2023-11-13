@@ -4,7 +4,8 @@ mkfile_dir_path := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 build_dir_path := $(mkfile_dir_path)/build
 current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 BLD := $(mkfile_dir_path)/build
-DPS := $(mkfile_dir_path)/deps
+DPD  =  deps
+DPS := $(mkfile_dir_path)/$(DPD)
 
 all: get_deps build_deps buildEpoxy
 
@@ -18,10 +19,10 @@ get_deps:
 build_deps:
 	mkdir -p $(mkfile_dir_path)
 	cd $(CURDIR)/$(BUILD)
-	make -f $(mkfile_dir_path)/dps/lists/GNUmakefile BUILD=$(BLD)
-	make -f $(mkfile_dir_path)/dps/pipes/GNUmakefile BUILD=$(BLD)
-	make -f $(mkfile_dir_path)/dps/Internet/GNUmakefile BUILD=$(BLD)
-	make -f $(mkfile_dir_path)/dps/time/GNUmakefile BUILD=$(BLD)
+	make -f $(mkfile_dir_path)/$(DPD)/lists/GNUmakefile BUILD=$(BLD)
+	make -f $(mkfile_dir_path)/$(DPD)/pipes/GNUmakefile BUILD=$(BLD)
+	make -f $(mkfile_dir_path)/$(DPD)/Internet/GNUmakefile BUILD=$(BLD)
+	make -f $(mkfile_dir_path)/$(DPD)/time/GNUmakefile BUILD=$(BLD)
 
 buildEpoxy:
 	cd $(BLD) && $(VOC) -s $(mkfile_dir_path)/src/epoxy.Mod
