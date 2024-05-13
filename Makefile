@@ -20,7 +20,21 @@ all: ${DEPS}
 		cp -r   ${ROOTDIR}/deps/$${i#*/}/build/* \
 			${ROOTDIR}/build/;               \
 	done
-	@cd build; voc -s ${ROOTDIR}/../src/epoxy.Mod ${ROOTDIR}/../src/testEpoxy.Mod -m
+	@cd build && voc -s ${ROOTDIR}/../src/epoxy.Mod
+
+tests:
+	@if [ ! -d build ]; then      \
+		echo Run make, first; \
+		exit 1;
+	fi
+	@cd build && voc ${ROOTDIR}/../src/testEpoxy.Mod -m       \
+		> /dev/null 2>&1                                  \
+		|| (echo Failed to compile, have you run make?    \
+			&& exit 1)
+	@./build/testEpoxy                                        \
+		> /dev/null 2>&1                                  \
+		&& echo ${ROOTDIR}/build/testList: passed         \
+		|| echo ${ROOTDIR}/build/testList: failed
 
 ${DEPS}:
 	@for i in $@; do                                          \
